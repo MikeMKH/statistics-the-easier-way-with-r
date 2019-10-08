@@ -17,7 +17,10 @@ t.test(diamonds %>% filter(as.integer(cut) > 2) %>% select(carat),
        var.equal = FALSE)
 # cuts are of higher quality for smaller diamonds
 
-diamonds %>% filter(as.integer(color) > 2) %>% summary()
+diamonds <- mutate(diamonds,
+                   quality=factor(case_when(as.integer(cut) <= 2 ~ "HIGH",
+                                            TRUE ~ "LOW")))
+diamonds %>% summary()
 
 # paired t-test
-#TODO
+# t.test(carat ~ quality, data = diamonds, paired = FALSE) # not a paired test
