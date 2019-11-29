@@ -36,3 +36,31 @@ summary(fit)$r.squared
 #pg 437
 par(mfrow=c(2,2))
 plot(fit)
+
+aov(fit)
+
+#pg 439
+df <- data.frame(age=c(21,24,25,32), number.of.kids=c(1,2,4,5))
+children <- lm(df$number.of.kids~df$age)
+df$residuals <- resid(children)
+summary(children)
+
+par(mfrow=c(2,2))
+plot(children)
+
+left <- df %>%
+  ggplot(aes(x=age, y=number.of.kids)) +
+  geom_point(size=5) +
+  geom_smooth(aes(color="red"), se=FALSE, method="lm") +
+  ggtitle("# of Kids by Mother's Age at Birth") +
+  theme(legend.position="none")
+
+right <- df %>%
+  ggplot(aes(x=age, y=residuals)) +
+  geom_point() +
+  geom_hline(yintercept=0) +
+  ggtitle("Residuals")
+
+cowplot::plot_grid(left,right)
+
+aov(children)
